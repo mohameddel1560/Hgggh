@@ -16,6 +16,7 @@
             overflow-x: hidden;
         }
 
+        /* العداد العلوي */
         .countdown-timer {
             position: fixed; top: 20px;
             background: rgba(255, 255, 255, 0.1);
@@ -64,8 +65,10 @@
             z-index: 5000;
             justify-content: center; align-items: center;
             flex-direction: column;
+            text-align: center;
         }
 
+        /* شريط الموسيقى السفلي */
         .music-dock {
             position: fixed; bottom: 20px; left: 50%;
             transform: translateX(-50%);
@@ -105,21 +108,21 @@
     </div>
 
     <div id="celebration-overlay">
-        <h1 style="color: #f9d71c;">С днём рождения, Василиса! 🎂</h1>
-        <p>Желаю тебе счастья и море вдохновения! 🎨✨</p>
-        <button onclick="document.getElementById('celebration-overlay').style.display='none'" style="padding:10px 20px; border-radius:20px; cursor:pointer;">Продолжить</button>
+        <h1 style="color: #f9d71c; font-size: 2.5rem;">С днём рождения, Василиса! 🎂</h1>
+        <p style="font-size: 1.2rem;">Пусть каждый твой день будет шедевром! 🎨✨</p>
+        <button onclick="document.getElementById('celebration-overlay').style.display='none'" style="margin-top:20px; padding:10px 25px; border-radius:20px; border:none; cursor:pointer; background:#f0abfc; font-weight:bold;">Продолжить</button>
     </div>
 
     <div class="music-dock">
-        <div class="album-box" onclick="handleMusic('asteria_WHAT_YOU_WANT.mp3', this)">
+        <div class="album-box" onclick="handleMusic('asteria_WHAT_YOU_WANT!_feat._p_v_-_asteria_WHAT_YOU_WANT!.mp3', this)">
             <img src="https://i.ibb.co/cSN4PfS7/hqdefault.jpg" class="album-art">
             <div style="font-size: 9px;">Asteria</div>
         </div>
-        <div class="album-box" onclick="handleMusic('Release_cabbage.mp3', this)">
+        <div class="album-box" onclick="handleMusic('Release_cabbage_(feat._Ulysse)_(..._-_Release_cabbage_(feat._Ulysse)_(.mp3', this)">
             <img src="https://i.ibb.co/9msf2dw8/hq720.jpg" class="album-art">
             <div style="font-size: 9px;">Cabbage</div>
         </div>
-        <div class="album-box" onclick="handleMusic('Aiobahn_81.mp3', this)">
+        <div class="album-box" onclick="handleMusic('Aiobahn_+81_feat._KOTOKO_INT..._-_Aiobahn_+81_feat._KOTOKO_INT.mp3', this)">
             <img src="https://i.ibb.co/gLn9Dfs5/artworks-1-ODo6tfg2-Uyzz-Fmj-I0-Fp-Vg-t500x500-1.jpg" class="album-art">
             <div style="font-size: 9px;">Aiobahn</div>
         </div>
@@ -128,11 +131,14 @@
     <audio id="audio-player"></audio>
 
     <script>
+        // 1. نظام العداد الزمني (يعيد نفسه تلقائياً كل سنة)
         function updateTimer() {
             const now = new Date();
             let year = now.getFullYear();
+            // شهر نوفمبر هو 10 برمجياً
             let bday = new Date(year, 10, 1); 
 
+            // لو التاريخ الحالي بعد عيد ميلاد السنة دي، نحسب للسنة الجاية
             if (now > bday && (now.getDate() !== 1 || now.getMonth() !== 10)) {
                 bday = new Date(year + 1, 10, 1);
             }
@@ -141,6 +147,7 @@
             const timerDiv = document.getElementById('timer');
             const overlay = document.getElementById('celebration-overlay');
 
+            // إذا كان اليوم هو 1 نوفمبر
             if (now.getMonth() === 10 && now.getDate() === 1) {
                 timerDiv.innerHTML = "🎉 С днем рождения! 🎉";
                 overlay.style.display = 'flex';
@@ -155,6 +162,7 @@
         }
         setInterval(updateTimer, 1000);
 
+        // 2. نظام تشغيل الموسيقى
         const player = document.getElementById('audio-player');
         let current = "";
 
@@ -167,11 +175,13 @@
             }
             document.querySelectorAll('.album-art').forEach(i => i.classList.remove('playing'));
             player.src = file;
-            player.play();
-            img.classList.add('playing');
-            current = file;
+            player.play().then(() => {
+                img.classList.add('playing');
+                current = file;
+            }).catch(err => console.log("Auto-play prevented or file not found."));
         }
 
+        // 3. تأثير القلوب الطائرة
         setInterval(() => {
             const h = document.createElement("div");
             h.className = "heart"; h.innerHTML = "❤️";
@@ -183,4 +193,3 @@
     </script>
 </body>
 </html>
-
